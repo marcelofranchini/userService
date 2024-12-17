@@ -1,0 +1,5 @@
+# Ignorar o arquivo de credenciais do Firebase
+firebaseconfig.json
+
+# Ignorar o arquivo .env
+.env
