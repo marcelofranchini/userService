@@ -1,0 +1,23 @@
+FROM golang:1.21 AS builder
+
+WORKDIR /app
+
+COPY cmd/userService/go.mod cmd/userService/go.sum ./
+
+RUN go mod tidy
+
+COPY cmd/userService/. .
+
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app ./cmd/userService
+
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /root/
+
+COPY --from=builder /app/app .
+
+EXPOSE 8080
+
+CMD ["./app"]
